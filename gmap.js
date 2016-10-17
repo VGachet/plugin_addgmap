@@ -34,6 +34,6 @@ function initializeMaps() {
     }
 }
 
-jQuery(window).load(function(){
+$(window).load(function(){
     initializeMaps()
 });
