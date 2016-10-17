@@ -14,6 +14,10 @@
 	<input type="submit" value="Créer la GMap">
 </form>
 
+<a href="http://www.coordonnees-gps.fr/" target="_blank">
+	<h3>Get gps datas</h3>
+</a>
+
 <script type="text/javascript">
 	jQuery(document).ready(function() {
 
