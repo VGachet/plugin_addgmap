@@ -36,3 +36,5 @@ function initializeMaps() {
     }
 }
 </script>
+
+<div id="map"></div>
