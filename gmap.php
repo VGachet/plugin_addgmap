@@ -1,24 +1,24 @@
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvVIeQvhtbNRKZt-mM1HNyTF7rV-EGV8Y&callback=initializeMaps&callback=initializeMaps"></script>
 <script type="text/javascript">
-	//* Google map *//
+
 var markers = [
     <?php echo $markers; ?>
 ];
 
 function initializeMaps() {
-    var latlng = new google.maps.LatLng(48.8688356, 2.341242599999987);
+    var latlon = new google.maps.LatLng(<?php echo $first_pin_lat . "," . $first_pin_lon; ?>);
     var myOptions = {
-        zoom: 1,
-        center: latlng,
+        zoom: <?php echo $zoom; ?>,
+        center: latlon,
         navigationControl: false,
         scaleControl: false,
-        draggable: false,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         mapTypeControl: false,
-        scrollwheel: false
+        scrollwheel: false,
+        panControl: true
     };
 
-    var map = new google.maps.Map(document.getElementById("map"),myOptions);
+    var map = new google.maps.Map(document.getElementById("map<?php echo $map_id; ?>"),myOptions);
     var infowindow = new google.maps.InfoWindow(), marker, i;
     for (i = 0; i < markers.length; i++) {
         marker = new google.maps.Marker({
@@ -37,4 +37,4 @@ function initializeMaps() {
 }
 </script>
 
-<div id="map"></div>
+<div id="map<?php echo $map_id; ?>" style="width:<?php echo $map_width; ?>;height:<?php echo $map_width; ?>;"></div>

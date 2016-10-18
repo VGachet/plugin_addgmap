@@ -126,174 +126,158 @@ add_action('admin_menu', 'addgmap_setup_menu');
 
 function display_admin_view()
 {
-	require('view_addgmap.php');
-}
-
-function insert_gmap_datas() {
-
-	if(isset($_POST['name']) && isset($_POST['lat']) && isset($_POST['lon']))
+	if(count($_POST)>0)
 	{
-		$map_width = htmlspecialchars($_POST['map_width']);
-		$map_height = htmlspecialchars($_POST['map_height']);
-
-		global $wpdb;
-
-		/*Insert a new map into the addgmap_maps table*/
-		$table_name = $wpdb->prefix . 'addgmap_maps';
-
-		$data =	array(
-						'map_shortcode'	=>	'waiting'
-				);
-		
-		$format = array(
-						'%s'
-				);
-
-		$wpdb->insert( $table_name, $data, $format );
-
-		/*Select the latest map_id inserted*/
-		$map_id_result = $wpdb->get_results( 
-			"
-			SELECT id_map 
-			FROM $table_name
-			ORDER BY id_map DESC
-			LIMIT 1
-			"
- 		);
-
- 		$map_id = $map_id_result[0]->id_map;
-
-		/*Insert pins into the addgmap_pin table*/
-
-		/*For each pin*/
-		$names = $_POST['name'];
-		$pin_number = 0;
-
-		foreach($names as $name)
+		if(isset($_POST['name']) && isset($_POST['lat']) && isset($_POST['lon']))
 		{
-			$table_name = $wpdb->prefix . 'addgmap_pin';
+			$map_width = htmlspecialchars($_POST['map_width']);
+			$map_height = htmlspecialchars($_POST['map_height']);
 
-			$lat = htmlspecialchars($_POST['lat'][$pin_number]);
-			$lon = htmlspecialchars($_POST['lon'][$pin_number]);
+			global $wpdb;
+
+			/*Insert a new map into the addgmap_maps table*/
+			$table_name = $wpdb->prefix . 'addgmap_maps';
 
 			$data =	array(
-						'name'	=>	$name,
-						'lat'	=>	$lat,
-						'lon'	=>	$lon
-				);
-		
+							'map_shortcode'	=>	'waiting'
+					);
+			
 			$format = array(
-							'%s',
-							'%s',
 							'%s'
 					);
 
 			$wpdb->insert( $table_name, $data, $format );
 
-			$pin_number++;
-		}
+			/*Select the latest map_id inserted*/
+			$map_id_result = $wpdb->get_results( 
+				"
+				SELECT id_map 
+				FROM $table_name
+				ORDER BY id_map DESC
+				LIMIT 1
+				"
+	 		);
 
-		/*Select latest pins inserted*/
-		$pin_id_results = $wpdb->get_results( 
-			"
-			SELECT id_pin 
-			FROM $table_name
-			ORDER BY id_pin DESC
-			LIMIT $pin_number;
-			"
- 		);
+	 		$map_id = $map_id_result[0]->id_map;
 
- 		foreach ($pin_id_results as $pin_id) {
- 			/*Insert the new map id for each new pins in the addgmap_pins table*/
+			/*Insert pins into the addgmap_pin table*/
+
+			/*For each pin*/
+			$names = $_POST['name'];
+			$pin_number = 0;
+
+			foreach($names as $name)
+			{
+				$table_name = $wpdb->prefix . 'addgmap_pin';
+
+				$lat = htmlspecialchars($_POST['lat'][$pin_number]);
+				$lon = htmlspecialchars($_POST['lon'][$pin_number]);
+
+				$data =	array(
+							'name'	=>	$name,
+							'lat'	=>	$lat,
+							'lon'	=>	$lon
+					);
+			
+				$format = array(
+								'%s',
+								'%s',
+								'%s'
+						);
+
+				$wpdb->insert( $table_name, $data, $format );
+
+				$pin_number++;
+			}
+
+			/*Select latest pins inserted*/
+			$pin_id_results = $wpdb->get_results( 
+				"
+				SELECT id_pin 
+				FROM $table_name
+				ORDER BY id_pin DESC
+				LIMIT $pin_number;
+				"
+	 		);
+
+	 		foreach ($pin_id_results as $pin_id) {
+	 			/*Insert the new map id for each new pins in the addgmap_pins table*/
+				$table_name = $wpdb->prefix . 'addgmap_pins';
+
+				$data =	array(
+							'id_pins_pin'	=>	$pin_id->id_pin,
+							'id_pins_map'	=>	$map_id
+					);
+			
+				$format = array(
+								'%d',
+								'%d'
+						);
+
+				$wpdb->insert( $table_name, $data, $format );
+	 		}
+
+			$route = "0";
+			$allow_it = "0";
+			$map_width = htmlspecialchars($_POST['map_width']);
+			$map_height = htmlspecialchars($_POST['map_height']);
+			$zoom = htmlspecialchars($_POST['zoom']);
+
+			if(isset($_POST['route']))
+			{
+				$route = "1";
+			}
+
+			if(isset($_POST['allow_it']))
+			{
+				$allow_it = "1";
+			}
+
+			global $wpdb;
+
+			/*Select latest map inserted*/
+
 			$table_name = $wpdb->prefix . 'addgmap_pins';
 
-			$data =	array(
-						'id_pins_pin'	=>	$pin_id->id_pin,
-						'id_pins_map'	=>	$map_id
-				);
-		
-			$format = array(
-							'%d',
-							'%d'
-					);
+			$latest_map_results = $wpdb->get_results( 
+				"
+				SELECT * 
+				FROM $table_name
+				WHERE id_pins_map = ( SELECT MAX(id_pins_map) FROM $table_name );
+				"
+	 		);
 
-			$wpdb->insert( $table_name, $data, $format );
- 		}
+	 		$latest_map_id = $latest_map_results[0]->id_pins_map;
+
+	 		$addgmap_shortcode = '[addgmap map_id="' . $latest_map_id . '" allow_it="' . $allow_it . '" route="' . $route .'" map_width="' . $map_width . '" map_height="' . $map_height . '" zoom="' . $zoom . '"]';
+
+			$table_name = $wpdb->prefix . 'addgmap_maps';
+
+			$wpdb->update( 
+				$table_name, 
+				array( 
+					'map_shortcode' => $addgmap_shortcode //update the shortcode row in the db
+				), 
+				array( 'id_map' => $latest_map_id ), 
+				array( 
+					'%s'
+				), 
+				array( '%d' ) 
+			);
+	 	}
 	}
+
+	require('view_addgmap.php');
 }
-add_action('init', 'insert_gmap_datas');
-
-function generate_shortcode_string()
-{
-	if(isset($_POST['name']))
-	{
-
-		$route = "0";
-		$allow_it = "0";
-		$map_width = htmlspecialchars($_POST['map_width']);
-		$map_height = htmlspecialchars($_POST['map_height']);
-
-		if(isset($_POST['route']))
-		{
-			$route = "1";
-		}
-
-		if(isset($_POST['allow_it']))
-		{
-			$allow_it = "1";
-		}
-
-		global $wpdb;
-
-		/*Select latest map inserted*/
-
-		$table_name = $wpdb->prefix . 'addgmap_pins';
-
-		$latest_map_results = $wpdb->get_results( 
-			"
-			SELECT * 
-			FROM $table_name
-			WHERE id_pins_map = ( SELECT MAX(id_pins_map) FROM $table_name );
-			"
- 		);
-
- 		$latest_map_id = $latest_map_results[0]->id_pins_map;
-
- 		/*$generated_shortcode = shortcode_atts( array(
- 			'map_id'		=> $latest_map_id,
-        	'allow_it'		=> $allow_it,
-        	'route' 		=> $route,
-        	'map_width'		=> $map_width,
-        	'map_height'	=> $map_height
-    	), $atts );*/
-
- 		$addgmap_shortcode = '[addgmap map_id="' . $latest_map_id . '" allow_it="' . $allow_it . '" route="' . $route .'" map_width="' . $map_width . '" map_height="' . $map_height . '"]';
-
-		$table_name = $wpdb->prefix . 'addgmap_maps';
-
-		$wpdb->update( 
-			$table_name, 
-			array( 
-				'map_shortcode' => $addgmap_shortcode //update the shortcode row in the db
-			), 
-			array( 'id_map' => $latest_map_id ), 
-			array( 
-				'%s'
-			), 
-			array( '%d' ) 
-		);
-
- 	}
-}
-add_action('init', 'generate_shortcode_string');
 
 function generate_gmap_shortcode($params)
 {
-		$map_id		= $params['map_id'];
-		$allow_it 	= $params['allow_it'];
-		$route 		= $params['route'];
-		$map_width 	= $params['map_width'];
-		$map_height = $params['map_height'];
+		$map_id		= htmlspecialchars($params['map_id']);
+		$allow_it 	= htmlspecialchars($params['allow_it']);
+		$route 		= htmlspecialchars($params['route']);
+		$map_width 	= htmlspecialchars($params['map_width']);
+		$map_height = htmlspecialchars($params['map_height']);
+		$zoom		= htmlspecialchars($params['zoom']);
 
 		global $wpdb;
 
@@ -330,31 +314,66 @@ function generate_gmap_shortcode($params)
 				"
  			);
 
- 			/*add pin name, pin lat and pin long to the markers var*/
+ 			/*Condition to define the simple gmap if route disable*/
 
- 			$markers .= "['" . $latest_pin_results[0]->name . "',". $latest_pin_results[0]->lat . "," . $latest_pin_results[0]->lon . "]";
- 			if($i < $count_pins)
-			{
-				$markers .= ",";
+ 			if($route == "0")
+ 			{
+	 			/*Get first pin lat and lon*/
+
+	 			if($i == "1")
+				{
+					$first_pin_lat = $latest_pin_results[0]->lat;
+					$first_pin_lon = $latest_pin_results[0]->lon;
+				}
+
+	 			/*add pin name, pin lat and pin long to the markers var*/
+
+	 			$markers .= "['" . $latest_pin_results[0]->name . "',". $latest_pin_results[0]->lat . "," . $latest_pin_results[0]->lon . "]";
+	 			if($i < $count_pins)
+				{
+					$markers .= ",";
+				}
 			}
+			/*Condition to define the route if route enable*/
+			elseif($route == "1")
+			{
+				if($i == "1")
+				{
+					$starting_pin = $latest_pin_results[0]->lat . "," . $latest_pin_results[0]->lon;
+				}
+				elseif($i == "2")
+				{
+					$ending_pin = $latest_pin_results[0]->lat . "," . $latest_pin_results[0]->lon;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				return false;
+			}
+
 			$i++;
  		}
 
- 		require('gmap.php');
+ 		if($route == "0")
+ 		{
+ 			 require('gmap.php');
+ 		}
+ 		else
+ 		{
+ 			require('gmap_route.php');
+ 		}
 }
 add_shortcode( 'addgmap', 'generate_gmap_shortcode' );
-
-/*function afficher_shortcode_map()
-{
-	extract(shortcode_atts)
-}*/
 
 function gmap_enqueue_script()
 {
 	wp_deregister_script('jquery');
-	wp_enqueue_script('jquery', plugin_dir_url('gmap_plugin').'gmap_plugin/jquery.js', true);
+	wp_enqueue_script('jquery', plugin_dir_url( 'gmap_plugin' ).'gmap_plugin/jquery.js', true);
 }
 add_action('wp_enqueue_scripts', 'gmap_enqueue_script');
-
 
 ?>
