@@ -5,6 +5,12 @@ Plugin Name: Vincent Gachet - Plugin
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
+/******************************
+
+START DATABASES INITIALIZATION
+
+*******************************/
+
 function addgmap_table_pin() {
 	global $wpdb;
 
@@ -35,7 +41,7 @@ function addgmap_table_maps() {
 
 	$sql = "CREATE TABLE $table_name (
 		id_map mediumint(9) NOT NULL AUTO_INCREMENT,
-		allow_it BOOLEAN NOT NULL,
+		map_shortcode VARCHAR(255),
 		PRIMARY KEY  (id_map)
 	) $charset_collate;";
 
@@ -106,33 +112,29 @@ function addgmap_drop_pins()
 
 register_deactivation_hook( __FILE__, 'addgmap_drop_pins' );
 
-function plugin_setup_menu()
+/******************************
+
+END DATABASES INITIALIZATION
+
+*******************************/
+
+function addgmap_setup_menu()
 {
-        add_menu_page( 'AddGmap', 'AddGmap', 'manage_options', 'plugin', 'insert_gmap_datas' );
+        add_menu_page( 'AddGmap', 'AddGmap', 'manage_options', 'addgmap', 'display_admin_view');
 }
-add_action('admin_menu', 'plugin_setup_menu');
+add_action('admin_menu', 'addgmap_setup_menu');
+
+function display_admin_view()
+{
+	require('view_addgmap.php');
+}
 
 function insert_gmap_datas() {
-	if ( !current_user_can( 'manage_options' ) )  {
-		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
-	}
 
-	require('view_addgmap.php');
-
-	if(isset($_POST['name']))
+	if(isset($_POST['name']) && isset($_POST['lat']) && isset($_POST['lon']))
 	{
-		$itineraire = false;
-		$allow_it = false;
-
-		if(isset($_POST['itineraire']))
-		{
-			$itineraire = true;
-		}
-
-		if(isset($_POST['allow_it']))
-		{
-			$allow_it = true;
-		}
+		$map_width = htmlspecialchars($_POST['map_width']);
+		$map_height = htmlspecialchars($_POST['map_height']);
 
 		global $wpdb;
 
@@ -140,11 +142,11 @@ function insert_gmap_datas() {
 		$table_name = $wpdb->prefix . 'addgmap_maps';
 
 		$data =	array(
-						'allow_it'	=>	$allow_it
+						'map_shortcode'	=>	'waiting'
 				);
 		
 		$format = array(
-						'%d'
+						'%s'
 				);
 
 		$wpdb->insert( $table_name, $data, $format );
@@ -219,9 +221,28 @@ function insert_gmap_datas() {
  		}
 	}
 }
+add_action('init', 'insert_gmap_datas');
 
-function generate_latest_gmap_shortcode()
+function generate_shortcode_string()
 {
+	if(isset($_POST['name']))
+	{
+
+		$route = "0";
+		$allow_it = "0";
+		$map_width = htmlspecialchars($_POST['map_width']);
+		$map_height = htmlspecialchars($_POST['map_height']);
+
+		if(isset($_POST['route']))
+		{
+			$route = "1";
+		}
+
+		if(isset($_POST['allow_it']))
+		{
+			$allow_it = "1";
+		}
+
 		global $wpdb;
 
 		/*Select latest map inserted*/
@@ -237,6 +258,56 @@ function generate_latest_gmap_shortcode()
  		);
 
  		$latest_map_id = $latest_map_results[0]->id_pins_map;
+
+ 		/*$generated_shortcode = shortcode_atts( array(
+ 			'map_id'		=> $latest_map_id,
+        	'allow_it'		=> $allow_it,
+        	'route' 		=> $route,
+        	'map_width'		=> $map_width,
+        	'map_height'	=> $map_height
+    	), $atts );*/
+
+ 		$addgmap_shortcode = '[addgmap map_id="' . $latest_map_id . '" allow_it="' . $allow_it . '" route="' . $route .'" map_width="' . $map_width . '" map_height="' . $map_height . '"]';
+
+		$table_name = $wpdb->prefix . 'addgmap_maps';
+
+		$wpdb->update( 
+			$table_name, 
+			array( 
+				'map_shortcode' => $addgmap_shortcode //update the shortcode row in the db
+			), 
+			array( 'id_map' => $latest_map_id ), 
+			array( 
+				'%s'
+			), 
+			array( '%d' ) 
+		);
+
+ 	}
+}
+add_action('init', 'generate_shortcode_string');
+
+function generate_gmap_shortcode($params)
+{
+		$map_id		= $params['map_id'];
+		$allow_it 	= $params['allow_it'];
+		$route 		= $params['route'];
+		$map_width 	= $params['map_width'];
+		$map_height = $params['map_height'];
+
+		global $wpdb;
+
+		/*Select shortcode pins*/
+
+		$table_name = $wpdb->prefix . 'addgmap_pins';
+
+		$latest_map_results = $wpdb->get_results( 
+			"
+			SELECT * 
+			FROM $table_name
+			WHERE id_pins_map = $map_id
+			"
+ 		);
 
  		/*Count the number of pins*/
  		$count_pins = count($latest_map_results);
@@ -271,7 +342,12 @@ function generate_latest_gmap_shortcode()
 
  		require('gmap.php');
 }
-add_shortcode( 'addgmap', 'generate_latest_gmap_shortcode' );
+add_shortcode( 'addgmap', 'generate_gmap_shortcode' );
+
+/*function afficher_shortcode_map()
+{
+	extract(shortcode_atts)
+}*/
 
 function gmap_enqueue_script()
 {

@@ -8,9 +8,11 @@
 	<input type="text" name="lon[0]" placeholder="longitude" required=""><br/>
 	<div class="location_content"></div>
 	<label>Itinéraire</label><br/>
-	<input type="checkbox" name="itineraire"><br/>
+	<input type="checkbox" name="route"><br/>
 	<label>Autoriser la création d'itinéraire</label><br/>
 	<input type="checkbox" name="allow_it"><br/>
+	<input type="text" name="map_width" placeholder="width" required=""><br/>
+	<input type="text" name="map_height" placeholder="height" required=""><br/>
 	<input type="submit" value="Créer la GMap">
 </form>
 
