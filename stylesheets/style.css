@@ -8183,7 +8183,7 @@ label {
 }
 
 /* line 31, ../sass/layout/_custom.scss */
-#get-location {
+#get-location, #export_csv {
   height: 45px;
   border: 0;
   background: #b9d6f2;

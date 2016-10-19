@@ -1,6 +1,8 @@
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvVIeQvhtbNRKZt-mM1HNyTF7rV-EGV8Y&callback=initializeMaps&callback=initializeMaps"></script>
-<script type="text/javascript">
+<!--Script Google Map Init-->
 
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=<?php echo $api_key; ?>&callback=initializeMaps&callback=initializeMaps"></script>
+
+<script type="text/javascript">
 var markers = [
     <?php echo $markers; ?>
 ];

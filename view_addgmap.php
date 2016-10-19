@@ -5,6 +5,7 @@
 		</div>
 		<div class="col-md-4 text-center">
 			<h2>Shortcode Gmap List</h2>
+			<button type="button" id="export_csv"><?php _e('Export pin datas', 'addgmap_plugin'); ?></button>
 		</div>
 	</div>
 </div>
@@ -15,6 +16,8 @@
 
 			<form action="" method="post">
 				<div class="col-md-12">
+				<label>Your Google Map api Key - <a target="_blank" href="https://console.developers.google.com/flows/enableapi?apiid=maps_backend%2Cgeocoding_backend%2Cdirections_backend%2Cdistance_matrix_backend%2Celevation_backend%2Cplaces_backend&reusekey=true&hl=fr"><?php _e('Get a key', 'addgmap_plugin'); ?></a></label>
+				<input type="text" name="api_key" placeholder="Api key" value="<?php if(isset($api_key)){ echo $api_key; } ?>" required="">
 				<div class="checkbox">
 					<label><input type="checkbox" name="route"><?php _e('Route', 'addgmap_plugin'); ?></label>
 				</div>
@@ -165,6 +168,20 @@
 
 			jQuery.post(ajaxurl, data, function(response) {
 				jQuery('#adress_location').html(response);
+			});
+
+		});
+
+		jQuery('#export_csv').on('click', function(e){
+			e.preventDefault();
+
+			var data = {
+				'action': 'export_csv'
+			};
+
+			jQuery.post(ajaxurl, data, function(response) {
+        		var uri = 'data:Application/csv;charset=UTF-8,' + encodeURIComponent(response);
+        		window.open(uri);
 			});
 
 		});
