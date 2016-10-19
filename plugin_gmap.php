@@ -241,7 +241,7 @@ function generate_gmap_shortcode($params)
 		{
 			$allow_it = "0";
 		}
-		if($route  == "")
+		if($route  == "" || $route > 1)
 		{
 			$route = "0";
 		}
@@ -375,9 +375,9 @@ add_action('wp_ajax_addgmap_location', 'get_locations_ajax');
 
 function csv_gmap_export()
 {
-	header( 'Content-Description: File Transfer' );
-	header( 'Content-Disposition: attachment; filename=export.csv' );
-	header( 'Content-Type: application/csv; charset=utf-8' );
+	header("Content-type: application/vnd.ms-excel; charset=utf-8");
+	header("Content-disposition: attachment; filename=addgmap_export.csv");
+
 	global $wpdb;
 
 	/*Select pins*/
@@ -392,19 +392,19 @@ function csv_gmap_export()
 		"
  	);
 
- 	$handle = fopen('php://memory', 'r+');
+ 	$out = fopen('PHP://output', 'w');
 
-	foreach ($get_pins as $get_pin) {
-	    fputcsv($handle, array($get_pin->id_pin.';'.$get_pin->lat));
-	}
+	foreach( $get_pins as $get_pin ):
+	    var_dump(fputcsv($out, array(
+	    	$get_pin->map_id,
+	    	$get_pin->lat,
+	    	$get_pin->lon
+	    )));
+	endforeach;
 
-	rewind($handle);
-	$content = stream_get_contents($handle);
-	fclose($handle);
-
-	wp_die($content);
+	fclose($out);
 }
-add_action('wp_ajax_export_csv', 'csv_gmap_export');
+add_action('admin_post_export_csv', 'csv_gmap_export');
 
 function gmap_enqueue_script()
 {

@@ -8183,7 +8183,7 @@ label {
 }
 
 /* line 31, ../sass/layout/_custom.scss */
-#get-location, #export_csv {
+#get-location, #export_csv, #help-button {
   height: 45px;
   border: 0;
   background: #b9d6f2;
@@ -8193,31 +8193,37 @@ label {
 
 /* line 39, ../sass/layout/_custom.scss */
 .delete_pin {
-  height: 20px;
-  width: 20px;
-  background: red;
-  border-radius: 50%;
-  border-color: grey;
+  height: 30px;
+  border: 0;
+  float: right;
+  margin-top: 10px;
+  display: block;
+  background: #b9d6f2;
 }
 
-/* line 49, ../sass/layout/_custom.scss */
+/* line 50, ../sass/layout/_custom.scss */
 .display-shortcode p {
   font-size: 14px;
   margin-top: 15px;
 }
 
-/* line 55, ../sass/layout/_custom.scss */
+/* line 56, ../sass/layout/_custom.scss */
 #loading_location {
   width: 50px;
   height: 50px;
   margin-top: 30px;
 }
 
-/* line 61, ../sass/layout/_custom.scss */
+/* line 62, ../sass/layout/_custom.scss */
 #adress_location {
   margin-top: 30px;
 }
-/* line 64, ../sass/layout/_custom.scss */
+/* line 65, ../sass/layout/_custom.scss */
 #adress_location p {
+  font-size: 20px;
+}
+
+/* line 72, ../sass/layout/_custom.scss */
+#help_modal p {
   font-size: 20px;
 }

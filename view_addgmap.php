@@ -5,7 +5,11 @@
 		</div>
 		<div class="col-md-4 text-center">
 			<h2>Shortcode Gmap List</h2>
-			<button type="button" id="export_csv"><?php _e('Export pin datas', 'addgmap_plugin'); ?></button>
+			<button id="help-button" data-toggle="modal" data-target="#help_modal">Help</button>
+			<form action="<?php echo admin_url( 'admin-post.php' ); ?>" method="post">
+				<input type="hidden" name="action" value="export_csv">
+				<input type="submit" id="export_csv" value="<?php _e('Export pin datas', 'addgmap_plugin'); ?>">
+			</form>
 		</div>
 	</div>
 </div>
@@ -94,6 +98,33 @@
   </div>
 </div>
 
+<div class="modal fade" id="help_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        
+      <h2>Shortcode Help</h2>
+      <p>Add the complete shortcode to your content of pages or posts.</p>
+      <p>Modify possibilities : </p>
+      <ul>
+	      <li>map_width</li>
+	      <li>map_height</li>
+	      <li>zoom (0 - 19)</li>
+	      <li>allow_it (display the search bar : 0 / 1)</li>
+      </ul>
+
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
 <script type="text/javascript">
 	jQuery(document).ready(function() {
 
@@ -102,7 +133,7 @@
 		jQuery('.add_pin').on('click', function(e){
 			e.preventDefault();
 			var html_block = '<div class="col-md-4"><label>Pin '+(increment+1)+'</label>';
-			html_block += '<button class="delete_pin" type="button">-</button>';
+			html_block += '<button class="delete_pin" type="button">Delete</button>';
 			html_block += '<input type="text" name="name['+increment+']" placeholder="Pin name" required="">';
 			html_block += '<input type="text" name="lat['+increment+']" placeholder="Latitude" required="">';
 			html_block += '<input type="text" name="lon['+increment+']" placeholder="Longitude" required=""></div>';
@@ -142,10 +173,14 @@
 
 		});
 
-		/*jQuery('.delete_pin').live( "click", function() {
+		jQuery('.location_content').on( "click",".delete_pin", function() {
 			console.log('click');
-		    jQuery(this).next().remove();
-		});*/
+		    jQuery(this).nextAll('input:lt(3)').remove();
+		    jQuery(this).prev().remove();
+		    jQuery(this).remove();
+
+		    increment = increment - 1;
+		});
 
 		var $loading = $('#loading_location').hide();
 		$(document)
@@ -173,16 +208,12 @@
 		});
 
 		jQuery('#export_csv').on('click', function(e){
-			e.preventDefault();
 
 			var data = {
 				'action': 'export_csv'
 			};
 
-			jQuery.post(ajaxurl, data, function(response) {
-        		var uri = 'data:Application/csv;charset=UTF-8,' + encodeURIComponent(response);
-        		window.open(uri);
-			});
+			jQuery.post(ajaxurl, data);
 
 		});
 
