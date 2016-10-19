@@ -383,6 +383,23 @@ function generate_gmap_shortcode($params)
 }
 add_shortcode( 'addgmap', 'generate_gmap_shortcode' );
 
+function get_locations_ajax()
+{
+	$adress = htmlspecialchars($_POST['adress']);
+
+    $json_link = 'https://maps.googleapis.com/maps/api/geocode/json?address=' . $adress;
+    $json_link = str_replace(' ', '+', $json_link);
+    $json_link = file_get_contents($json_link);
+    $json = json_decode($json_link,true);
+  	$latitude = $json['results'][0]['geometry']['location']['lat'];
+	$longitude = $json['results'][0]['geometry']['location']['lng'];
+
+	$display_locations = "<p>Latitude : " . $latitude . "</p><p>Longitude : " . $longitude . "</p>";
+
+	wp_die($display_locations);
+}
+add_action('wp_ajax_addgmap_location', 'get_locations_ajax');
+
 function gmap_enqueue_script()
 {
 	wp_deregister_script('jquery');

@@ -7,7 +7,7 @@ function initializeMaps() {
     zoom: <?php echo $zoom; ?>
   });
 
-  	var starting_pin = new google.maps.LatLng(<?php echo $starting_pin; ?>);
+  var starting_pin = new google.maps.LatLng(<?php echo $starting_pin; ?>);
 	var ending_pin = new google.maps.LatLng(<?php echo $ending_pin; ?>);
 
 
