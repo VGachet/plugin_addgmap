@@ -100,7 +100,7 @@ END DATABASES INITIALIZATION
 
 function addmap_setup_menu()
 {
-        add_menu_page( 'Addmap', 'Addmap', 'manage_options', 'addmap', 'display_admin_view');
+        add_menu_page( 'Addmap', 'Addmap', 'manage_options', 'addmap', 'display_admin_view', plugin_dir_url( 'addmap' ).'addmap/loader/pin.png');
 }
 add_action('admin_menu', 'addmap_setup_menu');
 
