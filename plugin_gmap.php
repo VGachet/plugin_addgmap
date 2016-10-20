@@ -392,17 +392,13 @@ function csv_gmap_export()
 		"
  	);
 
- 	$out = fopen('PHP://output', 'w');
+ 	echo utf8_decode('Map Id;Latitude;Longitude'."\n");
 
-	foreach( $get_pins as $get_pin ):
-	    var_dump(fputcsv($out, array(
-	    	$get_pin->map_id,
-	    	$get_pin->lat,
-	    	$get_pin->lon
-	    )));
-	endforeach;
+	 foreach ($get_pins as $pin) {
+         $csv_string = utf8_decode($pin->map_id.';'.$pin->lat.';'.$pin->lon."\n");
+         echo $csv_string;
+       }
 
-	fclose($out);
 }
 add_action('admin_post_export_csv', 'csv_gmap_export');
 

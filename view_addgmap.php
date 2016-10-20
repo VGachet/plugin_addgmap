@@ -6,7 +6,7 @@
 		<div class="col-md-4 text-center">
 			<h2>Shortcode Gmap List</h2>
 			<button id="help-button" data-toggle="modal" data-target="#help_modal">Help</button>
-			<form action="<?php echo admin_url( 'admin-post.php' ); ?>" method="post">
+			<form id="export-form" action="<?php echo admin_url( 'admin-post.php' ); ?>" method="post">
 				<input type="hidden" name="action" value="export_csv">
 				<input type="submit" id="export_csv" value="<?php _e('Export pin datas', 'addgmap_plugin'); ?>">
 			</form>
@@ -47,13 +47,13 @@
 					<label>Advanced Options</label>
 				</div>
 					<div class="col-md-6">
-						<input type="text" name="map_width" placeholder="Width" required="">
+						<input type="text" name="map_width" placeholder="Width (empty: 500px)">
 					</div>
 					<div class="col-md-6">
-						<input type="text" name="map_height" placeholder="Height" required="">
+						<input type="text" name="map_height" placeholder="Height (empty: 500px)">
 					</div>
 					<div class="col-md-6">
-						<input type="number" name="zoom" placeholder="Map zoom" required="">
+						<input type="number" name="zoom" placeholder="Map zoom (empty: 8)">
 					</div>
 					<div class="col-md-12 text-center">
 						<input type="submit" value="<?php _e('Create map', 'addgmap_plugin'); ?>">
@@ -177,6 +177,7 @@
 			console.log('click');
 		    jQuery(this).nextAll('input:lt(3)').remove();
 		    jQuery(this).prev().remove();
+		    jQuery(this).prev('.col-md-4').remove();
 		    jQuery(this).remove();
 
 		    var pin_counter = (jQuery('.location_content input').length)/3;
