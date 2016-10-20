@@ -179,7 +179,32 @@
 		    jQuery(this).prev().remove();
 		    jQuery(this).remove();
 
-		    increment = increment - 1;
+		    var pin_counter = (jQuery('.location_content input').length)/3;
+		    var eq = 0;
+
+		    for(i = 0; i < pin_counter; i++)
+		    {
+		    	increment = i;
+		    	console.log(increment);
+		    	for(j = eq; j < eq+3; j++)
+		    	{
+		    		if(j == eq){
+		    			jQuery('.location_content input:eq('+j+')').attr('name', 'name['+increment+']');
+		    		}
+		    		else if(j == (eq + 1))
+		    		{
+		    			jQuery('.location_content input:eq('+j+')').attr('name', 'lat['+increment+']');
+		    		}
+		    		else
+		    		{
+		    			jQuery('.location_content input:eq('+j+')').attr('name', 'lon['+increment+']');
+		    		}
+		    	}
+		    	eq = eq + 3;
+		    }
+
+		    increment++;
+
 		});
 
 		var $loading = $('#loading_location').hide();
