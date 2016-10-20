@@ -1,15 +1,29 @@
 <?php
 /*
-Plugin Name: Vincent Gachet - Plugin
+Plugin Name: addmap
+Text Domain: addmap
+Domain Path: /languages
+Author: Vincent Gachet
+Description: Simple plugin to add Google Maps to your website (using shortcodes)
 */
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
+
+
+define('PATH_ddmap', basename(dirname(__FILE__)));
 
 /******************************
 
 START DATABASES INITIALIZATION
 
 *******************************/
+
+/*Traduction link*/
+function addmap_load_textdomain()
+{
+	load_plugin_textdomain( 'addmap', false, PATH_ddmap.'/languages' );
+}
+add_action('init', 'addmap_load_textdomain');
 
 function addgmap_table_pin() {
 	global $wpdb;
@@ -84,11 +98,11 @@ END DATABASES INITIALIZATION
 
 *******************************/
 
-function addgmap_setup_menu()
+function addmap_setup_menu()
 {
-        add_menu_page( 'AddGmap', 'AddGmap', 'manage_options', 'addgmap', 'display_admin_view');
+        add_menu_page( 'Addmap', 'Addmap', 'manage_options', 'addmap', 'display_admin_view');
 }
-add_action('admin_menu', 'addgmap_setup_menu');
+add_action('admin_menu', 'addmap_setup_menu');
 
 function display_admin_view()
 {
@@ -174,7 +188,7 @@ function display_admin_view()
 
 			global $wpdb;
 
-	 		$addgmap_shortcode = '[addgmap map_id="' . $map_id . '" allow_it="' . $allow_it . '" route="' . $route .'" map_width="' . $map_width . '" map_height="' . $map_height . '" zoom="' . $zoom . '"]';
+	 		$addgmap_shortcode = '[addmap map_id="' . $map_id . '" allow_it="' . $allow_it . '" route="' . $route .'" map_width="' . $map_width . '" map_height="' . $map_height . '" zoom="' . $zoom . '"]';
 
 			$table_name = $wpdb->prefix . 'addgmap_info';
 
@@ -353,7 +367,7 @@ function generate_gmap_shortcode($params)
  			require('gmap_route.php');
  		}
 }
-add_shortcode( 'addgmap', 'generate_gmap_shortcode' );
+add_shortcode( 'addmap', 'generate_gmap_shortcode' );
 
 /*function to get lat and lng from adress */
 function get_locations_ajax()
@@ -402,18 +416,18 @@ function csv_gmap_export()
 }
 add_action('admin_post_export_csv', 'csv_gmap_export');
 
-function gmap_enqueue_script()
+function addmap_enqueue_script()
 {
 	wp_deregister_script('jquery');
-	wp_enqueue_script('jquery', plugin_dir_url( 'gmap_plugin' ).'gmap_plugin/jquery.js', true);
+	wp_enqueue_script('jquery', plugin_dir_url( 'addmap' ).'addmap/jquery.js', true);
 }
-add_action('wp_enqueue_scripts', 'gmap_enqueue_script');
+add_action('wp_enqueue_scripts', 'addmap_enqueue_script');
 
 if(is_admin())
 {
-	function gmap_enqueue_styles()
+	function addmap_enqueue_styles()
 	{
-		wp_enqueue_style('gmap_styles', plugin_dir_url( 'gmap_plugin' ).'gmap_plugin/stylesheets/style.css', true);
+		wp_enqueue_style('addmap_styles', plugin_dir_url( 'addmap' ).'addmap/stylesheets/style.css', true);
 	}
-	add_action('admin_print_styles', 'gmap_enqueue_styles');
+	add_action('admin_print_styles', 'addmap_enqueue_styles');
 }

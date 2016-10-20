@@ -8175,20 +8175,20 @@ label {
 /* line 22, ../sass/layout/_custom.scss */
 .add_pin, input[type='submit'] {
   height: 45px;
-  width: 150px;
   border: 0;
   background: #0353a4;
   font-size: 20px;
   color: #fff;
 }
 
-/* line 31, ../sass/layout/_custom.scss */
+/* line 30, ../sass/layout/_custom.scss */
 #get-location, #export_csv, #help-button {
   height: 45px;
   border: 0;
   background: #b9d6f2;
   font-size: 20px;
   margin-right: 20px;
+  color: #000;
 }
 
 /* line 39, ../sass/layout/_custom.scss */

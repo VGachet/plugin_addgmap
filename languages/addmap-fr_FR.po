@@ -1,0 +1,141 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: addmap\n"
+"POT-Creation-Date: 2016-10-20 16:07+0200\n"
+"PO-Revision-Date: 2016-10-20 16:07+0200\n"
+"Last-Translator: \n"
+"Language-Team: team\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.11\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Poedit-KeywordsList: _e\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: view_addgmap.php:4
+msgid "Addmap Options"
+msgstr "Options Addmap"
+
+#: view_addgmap.php:7
+msgid "Shortcode Addmap List"
+msgstr "Liste des shortcodes Addmap"
+
+#: view_addgmap.php:8
+msgid "Help"
+msgstr "Aide"
+
+#: view_addgmap.php:11
+msgid "Export pin datas"
+msgstr "Exporter données Addmap"
+
+#: view_addgmap.php:23
+msgid "Your Google Map api Key"
+msgstr "Votre clé API Google Map"
+
+#: view_addgmap.php:23
+msgid "Get a key"
+msgstr "Obtenir une clé"
+
+#: view_addgmap.php:26
+msgid "Route"
+msgstr "Itinéraire"
+
+#: view_addgmap.php:29
+msgid "Display Google Map search bar"
+msgstr "Afficher la barre de recherche sur la map"
+
+#: view_addgmap.php:32
+msgid "Location(s)"
+msgstr "Localisations"
+
+#: view_addgmap.php:33
+msgid "Add pin"
+msgstr "Ajouter un pin"
+
+#: view_addgmap.php:34
+msgid "Get your adress location"
+msgstr "Obtenir vos localisation par adresse"
+
+#: view_addgmap.php:39
+msgid "Pin name"
+msgstr "Nom du pin"
+
+#: view_addgmap.php:40
+msgid "Latitude"
+msgstr "Latitude"
+
+#: view_addgmap.php:41
+msgid "Longitude"
+msgstr "Longitude"
+
+#: view_addgmap.php:47
+msgid "Advanced Options"
+msgstr "Options avancées"
+
+#: view_addgmap.php:50
+msgid "Width (empty: 500px)"
+msgstr "Largueur (vide: 500px)"
+
+#: view_addgmap.php:53
+msgid "Height (empty: 500px)"
+msgstr "Hauteur (vide: 500px)"
+
+#: view_addgmap.php:56
+msgid "Map zoom (empty: 8)"
+msgstr "Zoom de la map (vide: 8)"
+
+#: view_addgmap.php:59
+msgid "Generate addmap shortcode"
+msgstr "Générer le addmap shortcode"
+
+#: view_addgmap.php:87
+msgid "Insert your adress"
+msgstr "Insérer votre adresse"
+
+#: view_addgmap.php:88
+msgid "Get locations"
+msgstr "Obtenir les coordonnées"
+
+#: view_addgmap.php:111
+msgid "Shortcode Help"
+msgstr "Aide - Shortcode"
+
+#: view_addgmap.php:112
+msgid "Add the complete shortcode to your content of pages or posts."
+msgstr "Ajouter le shortcode complet dans le contenu de la page ou article"
+
+#: view_addgmap.php:113
+msgid "Modify possibilities : "
+msgstr "Possibilités de modification :"
+
+#: view_addgmap.php:115
+msgid "map_width"
+msgstr "map_width"
+
+#: view_addgmap.php:116
+msgid "map_height"
+msgstr "map_height"
+
+#: view_addgmap.php:117
+msgid "zoom (0 - 19)"
+msgstr "zoom (entre 0 et 19)"
+
+#: view_addgmap.php:118
+msgid "allow_it (display the search bar : 0 / 1)"
+msgstr "allow_it (afficher la barre de recherche : 0 ou 1)"
+
+#: view_addgmap.php:119
+msgid "Example : "
+msgstr "Exemple : "
+
+#~ msgid "Create map"
+#~ msgstr "Générer le addmap shortcode"
+
+#~ msgid "Shortcode Gmap List"
+#~ msgstr "Liste des shortcodes Addmap"
+
+#~ msgid "AddGmap Options"
+#~ msgstr "Option AddMap"

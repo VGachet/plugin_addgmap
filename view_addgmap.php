@@ -1,14 +1,14 @@
 <div class="container-fluid">
 <div class="row">
 		<div class="col-md-8 text-center">
-			<h2>AddGmap Options</h2>
+			<h2><?php _e('Addmap Options', 'addmap') ?></h2>
 		</div>
 		<div class="col-md-4 text-center">
-			<h2>Shortcode Gmap List</h2>
-			<button id="help-button" data-toggle="modal" data-target="#help_modal">Help</button>
+			<h2><?php _e('Shortcode Addmap List', 'addmap') ?></h2>
+			<button id="help-button" data-toggle="modal" data-target="#help_modal"><?php _e('Help','addmap') ?></button>
 			<form id="export-form" action="<?php echo admin_url( 'admin-post.php' ); ?>" method="post">
 				<input type="hidden" name="action" value="export_csv">
-				<input type="submit" id="export_csv" value="<?php _e('Export pin datas', 'addgmap_plugin'); ?>">
+				<input type="submit" id="export_csv" value="<?php _e('Export pin datas', 'addmap'); ?>">
 			</form>
 		</div>
 	</div>
@@ -20,43 +20,43 @@
 
 			<form action="" method="post">
 				<div class="col-md-12">
-				<label>Your Google Map api Key - <a target="_blank" href="https://console.developers.google.com/flows/enableapi?apiid=maps_backend%2Cgeocoding_backend%2Cdirections_backend%2Cdistance_matrix_backend%2Celevation_backend%2Cplaces_backend&reusekey=true&hl=fr"><?php _e('Get a key', 'addgmap_plugin'); ?></a></label>
+				<label><?php _e('Your Google Map api Key','addmap') ?> - <a target="_blank" href="https://console.developers.google.com/flows/enableapi?apiid=maps_backend%2Cgeocoding_backend%2Cdirections_backend%2Cdistance_matrix_backend%2Celevation_backend%2Cplaces_backend&reusekey=true&hl=fr"><?php _e('Get a key', 'addmap'); ?></a></label>
 				<input type="text" name="api_key" placeholder="Api key" value="<?php if(isset($api_key)){ echo $api_key; } ?>" required="">
 				<div class="checkbox">
-					<label><input type="checkbox" name="route"><?php _e('Route', 'addgmap_plugin'); ?></label>
+					<label><input type="checkbox" name="route"><?php _e('Route', 'addmap'); ?></label>
 				</div>
 				<div class="checkbox">
-					<label><input type="checkbox" name="allow_it"><?php _e('Display Google Map search bar', 'addgmap_plugin'); ?></label>
+					<label><input type="checkbox" name="allow_it"><?php _e('Display Google Map search bar', 'addmap'); ?></label>
 				</div>
 
-					<label><?php _e('Location(s)', 'addgmap_plugin'); ?></label>
-					<button class="add_pin pull-right" type="button"><?php _e('Add pin', 'addgmap_plugin'); ?></button>
-					<button type="button" id="get-location" class="pull-right" data-toggle="modal" data-target="#location_modal">Get your adress location</button>
+					<label><?php _e('Location(s)', 'addmap'); ?></label>
+					<button class="add_pin pull-right" type="button"><?php _e('Add pin', 'addmap'); ?></button>
+					<button type="button" id="get-location" class="pull-right" data-toggle="modal" data-target="#location_modal"><?php _e('Get your adress location','addmap') ?></button>
 					<br/>
 					<div class="location_content">
 						<div class="col-md-4">
 							<label>Pin 1</label><br/>
-							<input type="text" name="name[0]" placeholder="<?php _e('Pin name', 'addgmap_plugin'); ?>" required="">
-							<input type="text" name="lat[0]" placeholder="Latitude" required="">
-							<input type="text" name="lon[0]" placeholder="Longitude" required="">
+							<input type="text" name="name[0]" placeholder="<?php _e('Pin name', 'addmap'); ?>" required="">
+							<input type="text" name="lat[0]" placeholder="<?php _e('Latitude','addmap') ?>" required="">
+							<input type="text" name="lon[0]" placeholder="<?php _e('Longitude','addmap') ?>" required="">
 						</div>
 					</div>
 				</div>
 				
 				<div class="col-md-12">
-					<label>Advanced Options</label>
+					<label><?php _e('Advanced Options', 'addmap'); ?></label>
 				</div>
 					<div class="col-md-6">
-						<input type="text" name="map_width" placeholder="Width (empty: 500px)">
+						<input type="text" name="map_width" placeholder="<?php _e('Width (empty: 500px)', 'addmap') ?>">
 					</div>
 					<div class="col-md-6">
-						<input type="text" name="map_height" placeholder="Height (empty: 500px)">
+						<input type="text" name="map_height" placeholder="<?php _e('Height (empty: 500px)', 'addmap') ?>">
 					</div>
 					<div class="col-md-6">
-						<input type="number" name="zoom" placeholder="Map zoom (empty: 8)">
+						<input type="number" name="zoom" placeholder="<?php _e('Map zoom (empty: 8)', 'addmap') ?>">
 					</div>
 					<div class="col-md-12 text-center">
-						<input type="submit" value="<?php _e('Create map', 'addgmap_plugin'); ?>">
+						<input type="submit" value="<?php _e('Generate addmap shortcode', 'addmap'); ?>">
 					</div>
 			</form>
 
@@ -84,11 +84,11 @@
       </div>
       <div class="modal-body">
         <form action="#" id="addgmap_location_form">
-		    <input type="text" name="adress" placeholder="<?php _e('Insert your adress','addgmap_plugin'); ?>" required="">
-		    <input type="submit" value="<?php _e('Get locations','addgmap_plugin'); ?>">
+		    <input type="text" name="adress" placeholder="<?php _e('Insert your adress','addmap'); ?>" required="">
+		    <input type="submit" value="<?php _e('Get locations','addmap'); ?>">
 		</form>
 		<div id="loading_location">
-			<img src="<?php echo plugin_dir_url( 'gmap_plugin' ).'gmap_plugin/loader/loader.gif'; ?>" alt="">
+			<img src="<?php echo plugin_dir_url( 'gmap_plugin' ).'addmap/loader/loader.gif'; ?>" alt="">
 		</div>
 		<div id="adress_location"></div>
       </div>
@@ -108,14 +108,15 @@
       </div>
       <div class="modal-body text-center">
         
-      <h2>Shortcode Help</h2>
-      <p>Add the complete shortcode to your content of pages or posts.</p>
-      <p>Modify possibilities : </p>
+      <h2><?php _e('Shortcode Help','addmap') ?></h2>
+      <p><?php _e('Add the complete shortcode to your content of pages or posts.','addmap') ?></p>
+      <p><?php _e('Modify possibilities : ','addmap') ?></p>
       <ul>
-	      <li>map_width</li>
-	      <li>map_height</li>
-	      <li>zoom (0 - 19)</li>
-	      <li>allow_it (display the search bar : 0 / 1)</li>
+	      <li><?php _e('map_width','addmap') ?></li>
+	      <li><?php _e('map_height', 'addmap') ?></li>
+	      <li><?php _e('zoom (0 - 19)', 'addmap') ?></li>
+	      <li><?php _e('allow_it (display the search bar : 0 / 1)','addmap') ?></li>
+	      <li><?php _e('Example : ','addmap') ?>[addmap map_id="1" allow_it="0" route="1" map_width="100%" map_height="200px" zoom="7"]</li>
       </ul>
 
       </div>
@@ -177,7 +178,7 @@
 			console.log('click');
 		    jQuery(this).nextAll('input:lt(3)').remove();
 		    jQuery(this).prev().remove();
-		    jQuery(this).prev('.col-md-4').remove();
+		    jQuery(this).closest('.col-md-4').remove();
 		    jQuery(this).remove();
 
 		    var pin_counter = (jQuery('.location_content input').length)/3;
