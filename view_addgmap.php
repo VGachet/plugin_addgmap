@@ -25,10 +25,18 @@
 				<div class="checkbox">
 					<label><input type="checkbox" name="route"><?php _e('Route', 'addmap'); ?></label>
 				</div>
-				<div class="checkbox">
+				<!--<div class="checkbox">
 					<label><input type="checkbox" name="allow_it"><?php _e('Display Google Map search bar', 'addmap'); ?></label>
+				</div>-->
+				<div id="select_mode">
+				<label><?php _e('Travel Modes','addmap') ?></label>
+				<select name="travel_mode">
+					<option value="DRIVING"><?php _e('Driving','addmap') ?></option>
+					<option value="BICYCLING"><?php _e('Bicycling','addmap') ?></option>
+					<option value="" ="TRANSIT"><?php _e('Transit','addmap') ?></option>
+					<option value="" ="WALKING"><?php _e('Walking','addmap') ?></option>
+				</select><br/>
 				</div>
-
 					<label><?php _e('Location(s)', 'addmap'); ?></label>
 					<button class="add_pin pull-right" type="button"><?php _e('Add pin', 'addmap'); ?></button>
 					<button type="button" id="get-location" class="pull-right" data-toggle="modal" data-target="#location_modal"><?php _e('Get your adress location','addmap') ?></button>
@@ -131,6 +139,8 @@
 
 			var increment = 1;
 
+		jQuery('#select_mode').hide();
+
 		jQuery('.add_pin').on('click', function(e){
 			e.preventDefault();
 			var html_block = '<div class="col-md-4"><label>Pin '+(increment+1)+'</label>';
@@ -149,6 +159,8 @@
 
 			if( jQuery('input[name=route]').is(':checked') ){
 		    	jQuery('.add_pin').hide();
+		    	jQuery('input[name=zoom]').hide();
+		    	jQuery('#select_mode').show();
 		    	jQuery('.location_content').html('');
 		    	var html_block = "";
 		    	html_block += '<input type="hidden" name="name[0]">';
@@ -161,7 +173,9 @@
 				$('.location_content').append(html_block);
 
 			} else {
+				jQuery('#select_mode').hide();
 			    jQuery('.add_pin').show();
+			    jQuery('input[name=zoom]').show();
 				jQuery('.location_content').html('');
 			    var html_block = '<div class="col-md-4"><label>Pin 1</label>';
 			html_block += '<div class="col-md-12"><input type="text" name="name[0]" placeholder="Pin name" required=""></div>';

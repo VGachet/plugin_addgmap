@@ -32,7 +32,7 @@ function displayRoute(origin, destination, service, display) {
   service.route({
     origin: origin,
     destination: destination,
-    travelMode: google.maps.TravelMode.DRIVING,
+    travelMode: google.maps.TravelMode.<?php echo $mode; ?>,
     avoidTolls: true
   }, function(response, status) {
     if (status === google.maps.DirectionsStatus.OK) {

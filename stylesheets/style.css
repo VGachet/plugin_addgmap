@@ -8232,3 +8232,8 @@ label {
 #export-form {
   display: inline;
 }
+
+/* line 81, ../sass/layout/_custom.scss */
+img {
+  width: 20px;
+}

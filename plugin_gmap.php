@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: addmap
+Plugin Name: Addmap
 Text Domain: addmap
 Domain Path: /languages
 Author: Vincent Gachet
@@ -151,10 +151,10 @@ function display_admin_view()
 				$lon = htmlspecialchars($_POST['lon'][$pin_number]);
 
 				$data =	array(
-							'name'	=>	$name,
-							'lat'	=>	$lat,
-							'lon'	=>	$lon,
-							'map_id'=>	$map_id
+							'name'  => $name,
+							'lat'   => $lat,
+							'lon'   => $lon,
+							'map_id'=> $map_id
 					);
 			
 				$format = array(
@@ -169,32 +169,44 @@ function display_admin_view()
 
 			}
 
-			$route = "0";
-			$allow_it = "0";
-			$map_width = htmlspecialchars($_POST['map_width']);
+			$route      = "0";
+			//$allow_it   = "0";
+			$map_width  = htmlspecialchars($_POST['map_width']);
 			$map_height = htmlspecialchars($_POST['map_height']);
-			$zoom = htmlspecialchars($_POST['zoom']);
-			$api_key = htmlspecialchars($_POST['api_key']);
+			$zoom       = htmlspecialchars($_POST['zoom']);
+			$api_key    = htmlspecialchars($_POST['api_key']);
+			$mode       = htmlspecialchars($_POST['travel_mode']);
 
 			if(isset($_POST['route']))
 			{
 				$route = "1";
 			}
 
-			if(isset($_POST['allow_it']))
+			/*if(isset($_POST['allow_it']))
 			{
 				$allow_it = "1";
-			}
+			}*/
 
 			global $wpdb;
 
-	 		$addgmap_shortcode = '[addmap map_id="' . $map_id . '" allow_it="' . $allow_it . '" route="' . $route .'" map_width="' . $map_width . '" map_height="' . $map_height . '" zoom="' . $zoom . '"]';
+	 		/*$addgmap_shortcode = '[addmap map_id="' . $map_id . '" allow_it="' . $allow_it . '" route="' . $route .'" map_width="' . $map_width . '" map_height="' . $map_height . '" zoom="' . $zoom . '" travel_mode="' . $mode . '"]';*/
+
+	 		if($route == "0" || $route != 1 && $route != "0")
+	 		{
+				$addgmap_shortcode = '[addmap map_id="' . $map_id . '" route="' . $route .'" map_width="' . $map_width . '" map_height="' . $map_height . '" zoom="' . $zoom . '"]';
+	 		}
+	 		else
+	 		{
+	 			$addgmap_shortcode = '[addmap map_id="' . $map_id . '" route="' . $route .'" map_width="' . $map_width . '" map_height="' . $map_height . '" zoom="' . $zoom . '" travel_mode="' . $mode . '"]';
+	 		}
+	 	
+
 
 			$table_name = $wpdb->prefix . 'addgmap_info';
 
 				$data =	array(
-							'map_shortcode'	=>	$addgmap_shortcode,
-							'api_key'	=>	$api_key
+							'map_shortcode' => $addgmap_shortcode,
+							'api_key'       => $api_key
 					);
 			
 				$format = array(
@@ -240,21 +252,24 @@ function display_admin_view()
 function generate_gmap_shortcode($params)
 {
 
-		$map_id		= htmlspecialchars($params['map_id']);
-		$allow_it 	= htmlspecialchars($params['allow_it']);
-		$route 		= htmlspecialchars($params['route']);
-		$map_width 	= htmlspecialchars($params['map_width']);
+		$map_id     = htmlspecialchars($params['map_id']);
+		//$allow_it   = htmlspecialchars($params['allow_it']);
+		$route      = htmlspecialchars($params['route']);
+		$map_width  = htmlspecialchars($params['map_width']);
 		$map_height = htmlspecialchars($params['map_height']);
-		$zoom		= htmlspecialchars($params['zoom']);
+		$zoom       = htmlspecialchars($params['zoom']);
+		$mode       = ucfirst(htmlspecialchars($params['travel_mode']));
+
+		$mode_array = array("DRIVING", "BICYCLING", "TRANSIT", "WALKING");
 
 		if($zoom == "")
 		{
 			$zoom = 8;
 		}
-		if($allow_it  == "")
+		/*if($allow_it  == "")
 		{
 			$allow_it = "0";
-		}
+		}*/
 		if($route  == "" || $route > 1)
 		{
 			$route = "0";
@@ -271,6 +286,10 @@ function generate_gmap_shortcode($params)
 		{
 			$error = "<p class='notif'>Please insert the map id in the shortcode</p>";
 			return $error;
+		}
+		if($mode == "" || !in_array($mode, $mode_array))
+		{
+			$mode = "DRIVING";
 		}
 
 		global $wpdb;
@@ -377,8 +396,8 @@ function get_locations_ajax()
     $json_link = 'https://maps.googleapis.com/maps/api/geocode/json?address=' . $adress;
     $json_link = str_replace(' ', '+', $json_link);
     $json_link = file_get_contents($json_link);
-    $json = json_decode($json_link,true);
-  	$latitude = $json['results'][0]['geometry']['location']['lat'];
+    $json      = json_decode($json_link,true);
+  	$latitude  = $json['results'][0]['geometry']['location']['lat'];
 	$longitude = $json['results'][0]['geometry']['location']['lng'];
 
 	$display_locations = "<p>Latitude : " . $latitude . "</p><p>Longitude : " . $longitude . "</p>";
